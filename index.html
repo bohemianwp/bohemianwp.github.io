@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>吴朋边学边做</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Noto+Sans+SC:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.hero{margin:36px 0 26px;display:flex;flex-direction:column;gap:10px}
+.hero h1{font-size:clamp(2.2rem,7vw,3rem)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.grid a{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+.grid a:hover{border-color:var(--a)}
+.grid h2{font-size:1.25rem}
+.tag{font-size:.8rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>吴朋边学边做</h1>
+    <p class="muted">住在加拿大安省伦敦的细木工，两个孩子的爸爸。用 AI 边学边做，把做出来的东西放在这里。</p>
+  </div>
+  <div class="grid">
+    <a class="card" href="math/"><span class="tag">Math · 数学</span><h2>数学概念</h2><span class="muted">跟孩子一起学新加坡数学，一个概念一页，中英双语，能搜索、能复习。</span></a>
+    <a class="card" href="london-trick-or-treat/"><span class="tag">Tool · 小工具</span><h2>伦敦万圣节讨糖地图</h2><span class="muted">家长们一起标出热闹的街区。</span></a>
+    <a class="card" href="length-converter/"><span class="tag">Woodworking · 木工</span><h2>木工尺寸换算</h2><span class="muted">英制、公制互相换算。</span></a>
+  </div>
+</div>
+</body>
+</html>

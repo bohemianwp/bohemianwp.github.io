@@ -1,0 +1,19 @@
+{
+  "factors-multiples": [
+    {"q": {"zh": "32 块蓝积木和 24 块黄积木，分成一模一样的小袋，全部分完。最多能分几袋？这题用哪个？", "en": "32 blue blocks and 24 yellow blocks go into identical bags, using them all. What is the most bags? Which idea do you use?"},
+     "choices": [{"zh": "拆：公因数", "en": "Break it: common factor"}, {"zh": "凑：公倍数", "en": "Build it: common multiple"}], "answer": 0,
+     "why": {"zh": "往小里分、问「最多几份」，是拆。答案：8 袋。", "en": "Splitting into the most groups means breaking apart. Answer: 8 bags."}},
+    {"q": {"zh": "1 路车每 15 分钟一班，2 路车每 20 分钟一班，8:00 同时发车。下一次同时发车用哪个？", "en": "Bus 1 every 15 minutes, Bus 2 every 20 minutes, both leave at 8:00. To find the next time together, which idea?"},
+     "choices": [{"zh": "拆：公因数", "en": "Break it: common factor"}, {"zh": "凑：公倍数", "en": "Build it: common multiple"}], "answer": 1,
+     "why": {"zh": "两个节奏「下一次一起」，是凑。答案：9:00。", "en": "\"Next time together\" means building up. Answer: 9:00."}},
+    {"q": {"zh": "一块 48 cm × 30 cm 的木板切成同样大的正方形，不浪费。边长最大是多少？用哪个？", "en": "A 48 cm × 30 cm board is cut into equal squares with no waste. Largest side? Which idea?"},
+     "choices": [{"zh": "拆：公因数", "en": "Break it: common factor"}, {"zh": "凑：公倍数", "en": "Build it: common multiple"}], "answer": 0,
+     "why": {"zh": "「最大」「不浪费」，是拆。答案：6 cm。", "en": "\"Largest\" with no waste means breaking apart. Answer: 6 cm."}},
+    {"q": {"zh": "12 和 18 的最大公因数是多少？", "en": "What is the GCF of 12 and 18?"},
+     "choices": [{"zh": "3", "en": "3"}, {"zh": "6", "en": "6"}, {"zh": "36", "en": "36"}], "answer": 1,
+     "why": {"zh": "12 = 2×2×3，18 = 2×3×3，共有的是 2×3 = 6。", "en": "12 = 2×2×3, 18 = 2×3×3; shared blocks 2×3 = 6."}},
+    {"q": {"zh": "4 和 6 的最小公倍数是多少？", "en": "What is the LCM of 4 and 6?"},
+     "choices": [{"zh": "12", "en": "12"}, {"zh": "24", "en": "24"}, {"zh": "2", "en": "2"}], "answer": 0,
+     "why": {"zh": "跳 4 和跳 6 的青蛙第一次在 12 相遇。", "en": "The 4-frog and the 6-frog first meet at 12."}}
+  ]
+}

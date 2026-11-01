@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数学概念 · Math Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&family=Noto+Sans+SC:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.hero{display:flex;flex-direction:column;gap:8px;margin:12px 0 20px}
+.hero h1{font-size:clamp(1.9rem,6vw,2.6rem)}
+.search{display:flex;gap:8px;margin:8px 0 20px}
+.search input{flex:1;min-width:0;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button.big{font:inherit;font-weight:700;border:0;border-radius:999px;padding:10px 18px;background:var(--both);color:#fff;cursor:pointer}
+.chapter{margin:22px 0 8px;font-family:var(--display);font-size:1.2rem}
+.list{display:grid;gap:10px}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-decoration:none;color:var(--ink)}
+.item:hover{border-color:var(--a)}
+.item .t{font-weight:700}
+.item .s{font-size:.9rem;color:var(--muted)}
+.review{margin-top:14px;display:none;flex-direction:column;gap:12px}
+.q{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper)}
+.q .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.q button{font:inherit;border:1px solid var(--line);border-radius:999px;padding:5px 14px;background:var(--bg);color:var(--ink);cursor:pointer}
+.fb{margin-top:8px;border-radius:10px;padding:8px 10px}
+.fb.ok{background:var(--soft-both)} .fb.no{background:var(--soft-b)}
+.empty{color:var(--muted);padding:12px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a href="../" data-zh="← 首页" data-en="← Home"></a>
+  <span class="pill"><button id="lzh">中文</button><button id="len">English</button></span>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <h1 data-zh="数学概念" data-en="Math Concepts"></h1>
+    <p class="muted" data-zh="跟着新加坡数学（Dimensions Math）一起学。一个概念一页：动手玩、看懂为什么、做几道小题。" data-en="Learning along with Singapore Math (Dimensions Math). One page per concept: play with it, see why, try a few questions."></p>
+    <p><span class="star">★</span> <span id="stars">0</span> <span class="muted" data-zh="颗星（做完一页的小测验点亮一颗）" data-en="stars (finish a page's quiz to earn one)"></span></p>
+  </div>
+  <div class="search"><input id="q" type="search" autocomplete="off"></div>
+  <div class="row"><button class="big" id="rev" data-zh="随机复习 5 题" data-en="Random review: 5 questions"></button></div>
+  <div class="review" id="review"></div>
+  <div id="toc"></div>
+</div>
+<script>
+let LANG = 'zh';
+try { LANG = localStorage.getItem('lang') || (navigator.language.startsWith('zh') ? 'zh' : 'en'); } catch (e) {}
+const qs = new URLSearchParams(location.search); if (qs.get('lang')) LANG = qs.get('lang');
+let C = [], Q = {};
+const T = (o) => (o && (o[LANG] ?? o.zh)) || '';
+function stars() { let n = 0; for (const c of C) { try { if (localStorage.getItem('star:' + c.id)) n++; } catch (e) {} } return n; }
+function setLang(l) {
+  LANG = l; try { localStorage.setItem('lang', l); } catch (e) {}
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-zh]').forEach(el => el.textContent = el.dataset[l]);
+  document.getElementById('lzh').className = l === 'zh' ? 'on' : '';
+  document.getElementById('len').className = l === 'en' ? 'on' : '';
+  document.getElementById('q').placeholder = l === 'zh' ? '搜一个概念：分数、公倍数、LCM、fraction…' : 'Search a concept: fraction, LCM, 公倍数…';
+  render();
+}
+function render() {
+  document.getElementById('stars').textContent = stars();
+  const term = document.getElementById('q').value.trim().toLowerCase();
+  const hit = c => !term || [c.zh, c.en, ...(c.terms || []), T(c.summary)].some(s => (s || '').toLowerCase().includes(term));
+  const list = C.filter(hit);
+  const groups = {};
+  for (const c of list) { const k = c.book + '|' + c.chapter; (groups[k] = groups[k] || { c, items: [] }).items.push(c); }
+  const keys = Object.keys(groups).sort();
+  const toc = document.getElementById('toc');
+  if (!list.length) { toc.innerHTML = `<p class="empty">${LANG === 'zh' ? '还没有这个概念。' : 'No concept found yet.'}</p>`; return; }
+  toc.innerHTML = keys.map(k => {
+    const g = groups[k], c0 = g.c;
+    const head = c0.chapter ? `${c0.book} · ${LANG === 'zh' ? '第 ' + c0.chapter + ' 章' : 'Chapter ' + c0.chapter} · ${T(c0.chapterTitle)}` : T(c0.chapterTitle);
+    return `<div class="chapter">${head}</div><div class="list">` + g.items.map(c => {
+      let st = ''; try { if (localStorage.getItem('star:' + c.id)) st = ' <span class="star">★</span>'; } catch (e) {}
+      return `<a class="item" href="concepts/${c.id}.${LANG}.html"><span><span class="t">${LANG === 'zh' ? c.zh : c.en}${st}</span><br><span class="s">${T(c.summary)}</span></span><span class="s">${(c.learned || []).slice(-1)[0] || ''}</span></a>`;
+    }).join('') + '</div>';
+  }).join('');
+}
+function review() {
+  const pool = [];
+  for (const [id, arr] of Object.entries(Q)) arr.forEach(x => pool.push(x));
+  const pick = pool.sort(() => Math.random() - 0.5).slice(0, 5);
+  const box = document.getElementById('review'); box.style.display = 'flex';
+  box.innerHTML = pick.map((x, i) => `<div class="q" data-i="${i}"><b>${i + 1}.</b> ${T(x.q)}<div class="opts">${x.choices.map((c, j) => `<button data-j="${j}">${T(c)}</button>`).join('')}</div><div class="fb" hidden></div></div>`).join('');
+  box.onclick = e => {
+    const b = e.target.closest('button[data-j]'); if (!b) return;
+    const qd = b.closest('.q'), x = pick[+qd.dataset.i], ok = +b.dataset.j === x.answer;
+    const fb = qd.querySelector('.fb'); fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no');
+    fb.textContent = (ok ? (LANG === 'zh' ? '对了！' : 'Right! ') : (LANG === 'zh' ? '再想想：' : 'Think again: ')) + (ok ? T(x.why) : '');
+  };
+}
+document.getElementById('lzh').onclick = () => setLang('zh');
+document.getElementById('len').onclick = () => setLang('en');
+document.getElementById('q').oninput = render;
+document.getElementById('rev').onclick = review;
+Promise.all([fetch('data/concepts.json').then(r => r.json()), fetch('data/quiz.json').then(r => r.json())])
+  .then(([c, q]) => { C = c; Q = q; setLang(LANG); })
+  .catch(() => { document.getElementById('toc').innerHTML = '<p class="empty">Could not load the list.</p>'; });
+setLang(LANG);
+</script>
+</body>
+</html>

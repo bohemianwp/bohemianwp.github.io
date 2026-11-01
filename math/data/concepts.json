@@ -1,0 +1,13 @@
+[
+  {
+    "id": "factors-multiples",
+    "zh": "公因数与公倍数",
+    "en": "Common Factors and Common Multiples",
+    "book": "课外",
+    "chapter": 0,
+    "chapterTitle": {"zh": "课外补充", "en": "Extra topics"},
+    "learned": ["2026-10-31"],
+    "terms": ["因数", "factor", "倍数", "multiple", "公因数", "common factor", "公倍数", "common multiple", "最大公因数", "GCF", "GCD", "HCF", "最小公倍数", "LCM", "质数", "prime"],
+    "summary": {"zh": "拆还是凑？公因数是「拆」，公倍数是「凑」。", "en": "Break it or build it? Common factors break apart; common multiples build up."}
+  }
+]

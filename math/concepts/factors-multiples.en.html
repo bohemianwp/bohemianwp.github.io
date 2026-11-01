@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Factors and Multiples Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow column like a workbook; every idea = a "bench" with a hands-on toy, then one sentence of why. */
+:root{
+  --bg:#eef3f1; --paper:#ffffff; --ink:#1d2a2e; --muted:#5a6b6d; --line:#d3dedb;
+  --a:#2f6fd6; --b:#e07a1f; --both:#178a5e; --waste:#d14343;
+  --wood1:#e9c99a; --wood2:#dcb47c; --woodline:#8a6538;
+  --p2:#5b8def; --p3:#f0a03c; --p5:#3dbb84; --p7:#c46bd8; --px:#8a97a0;
+  --soft-a:#e3ecfb; --soft-b:#fcecdc; --soft-both:#dcf3e9;
+  --display:"Fredoka",ui-rounded,system-ui,sans-serif;
+  --body:"Nunito",system-ui,-apple-system,sans-serif;
+  --num:"Fredoka",ui-rounded,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111a1c; --paper:#192427; --ink:#e4eeec; --muted:#93a6a4; --line:#2b3b3e;
+  --a:#78a6ff; --b:#ffa65c; --both:#45d29b; --waste:#ff7070;
+  --wood1:#7a5a34; --wood2:#6a4c2a; --woodline:#e2c08e;
+  --soft-a:#1d2b44; --soft-b:#3a2a1a; --soft-both:#173a2d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111a1c; --paper:#192427; --ink:#e4eeec; --muted:#93a6a4; --line:#2b3b3e;
+  --a:#78a6ff; --b:#ffa65c; --both:#45d29b; --waste:#ff7070;
+  --wood1:#7a5a34; --wood2:#6a4c2a; --woodline:#e2c08e;
+  --soft-a:#1d2b44; --soft-b:#3a2a1a; --soft-both:#173a2d; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+.wrap{max-width:780px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(2.2rem,7vw,3.4rem)}
+h2{font-size:1.6rem}
+h3{font-size:1.15rem}
+p{margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.ca{color:var(--a)} .cb{color:var(--b)} .cboth{color:var(--both)} .cw{color:var(--waste)}
+
+header{display:flex;flex-direction:column;gap:14px;padding-top:8px}
+header .lead{font-size:1.1rem;color:var(--muted);max-width:60ch}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.duo > div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.duo .big{font-family:var(--display);font-size:1.8rem;line-height:1.1}
+@media (max-width:560px){.duo{grid-template-columns:1fr}}
+
+section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:16px}
+.why{border-left:4px solid var(--both);padding:4px 0 4px 14px}
+.why b{color:var(--both)}
+.controls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+label{display:flex;align-items:center;gap:8px;font-weight:700}
+input[type=range]{width:min(260px,60vw);accent-color:var(--a)}
+input[type=number],select{font:inherit;font-family:var(--num);width:5.2em;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+button{font:inherit;font-weight:700;cursor:pointer;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 16px}
+button:hover{border-color:var(--a)}
+button.primary{background:var(--a);color:var(--paper);border-color:var(--a)}
+:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--num);font-variant-numeric:tabular-nums;min-width:2.2em;text-align:center;padding:2px 10px;border-radius:999px;background:var(--soft-a);color:var(--ink);border:1px solid transparent}
+button.chip{padding:2px 12px}
+.chip.best{background:var(--both);color:var(--paper);font-weight:600}
+.note{color:var(--muted)}
+.note b{color:var(--ink)}
+
+.rects{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
+.rect{margin:0;display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0;max-width:100%}
+.grid{display:grid;gap:2px}
+.grid i{display:block;background:var(--a);border-radius:2px}
+.rect figcaption{font-size:.85rem;color:var(--muted);font-family:var(--num)}
+
+.scroll{overflow-x:auto;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+svg text{font-family:var(--num);fill:var(--muted);font-size:11px}
+.axis{stroke:var(--muted);stroke-width:1.5}
+.tick{stroke:var(--line);stroke-width:1}
+.arcA{fill:none;stroke:var(--a);stroke-width:2}
+.arcB{fill:none;stroke:var(--b);stroke-width:2}
+.dotA{fill:var(--a)} .dotB{fill:var(--b)}
+.dotBoth{fill:var(--both)}
+text.both{fill:var(--both);font-size:13px;font-weight:600}
+text.lblA{fill:var(--a);font-weight:600} text.lblB{fill:var(--b);font-weight:600}
+.wood1{fill:var(--wood1);stroke:var(--woodline);stroke-width:1}
+.wood2{fill:var(--wood2);stroke:var(--woodline);stroke-width:1}
+.waste{fill:var(--waste);opacity:.75}
+.cut{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 2}
+text.bl{fill:var(--ink);font-size:13px;font-weight:600}
+text.wl{fill:var(--waste);font-size:12px;font-weight:600}
+
+.result{background:var(--soft-both);border-radius:12px;padding:12px 14px}
+.stories{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stories > div{border:1px dashed var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+@media (max-width:560px){.stories{grid-template-columns:1fr}}
+
+.brickrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.brickrow .tag{width:8.5em;font-weight:700;font-size:.9rem;flex:none}
+.brick{font-family:var(--num);font-weight:600;color:#fff;min-width:2.1em;text-align:center;padding:4px 8px;border-radius:6px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.b2{background:var(--p2)} .b3{background:var(--p3)} .b5{background:var(--p5)} .b7{background:var(--p7)} .bx{background:var(--px)}
+.eq{font-family:var(--num);margin-left:6px}
+@media (max-width:480px){.brickrow .tag{width:100%}}
+
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.85rem;color:var(--muted);font-weight:700}
+.tablewrap{overflow-x:auto}
+
+.quiz{display:flex;flex-direction:column;gap:14px}
+.q{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.q .btns{display:flex;gap:10px;flex-wrap:wrap}
+.fb{border-radius:10px;padding:10px 12px}
+.fb.ok{background:var(--soft-both)}
+.fb.no{background:var(--soft-b)}
+.score{font-family:var(--num);font-weight:600}
+footer{color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="topbar" style="position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)"><div style="max-width:780px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-weight:600">
+<a href="../index.html?lang=en" style="text-decoration:none">← All concepts</a>
+<span style="display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden"><a href="factors-multiples.zh.html" onclick="try{localStorage.setItem('lang','zh')}catch(e){}" style="padding:4px 12px;text-decoration:none;color:var(--muted)">中文</a><a href="factors-multiples.en.html" onclick="try{localStorage.setItem('lang','en')}catch(e){}" style="padding:4px 12px;text-decoration:none;background:var(--a);color:var(--paper)">English</a></span>
+</div></div>
+
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Grade 5–6 math · Factors &amp; Multiples</span>
+  <h1>Break it, or build it?</h1>
+  <p class="lead">"Common factor" and "common multiple" sound like two hard words to memorize. Really, they answer two very different kinds of everyday questions. Start with this pair:</p>
+  <div class="duo">
+    <div><span class="big ca">Factor = break apart</span><p><b>Split a number evenly.</b> How many friends can share 12 cookies fairly?</p><p class="note">A factor is never bigger than the number itself.</p></div>
+    <div><span class="big cb">Multiple = build up</span><p><b>Stack the same amount again and again.</b> Buns come 8 to a pack. How many do you get with more packs?</p><p class="note">A multiple is never smaller than the number itself.</p></div>
+  </div>
+</header>
+
+<section id="s1">
+  <span class="eyebrow">Stop 1 · Factors</span>
+  <h2>Arrange the squares into rectangles</h2>
+  <p>Take <b class="num" id="nVal">12</b> squares and arrange them into a neat rectangle. Use every square, no extras, no gaps. How many different rectangles can you make?</p>
+  <div class="controls">
+    <label for="n">Number of squares <input id="n" type="range" min="1" max="36" value="12"></label>
+  </div>
+  <div class="rects" id="rects"></div>
+  <div><p class="note" style="margin-bottom:6px">So its factors are:</p><div class="chips" id="factorList"></div></div>
+  <p class="note" id="rectNote"></p>
+  <p class="why">The big idea: <b>a factor is a way to split a number evenly.</b> Every rectangle you find gives you two factors at once: the number of rows, and how many are in each row.</p>
+</section>
+
+<section id="s2">
+  <span class="eyebrow">Stop 2 · Common multiples</span>
+  <h2>Two frogs. When do they land on the same stone?</h2>
+  <p>Blue frog A jumps <b class="ca num" id="aShow">4</b> spaces at a time. Orange frog B jumps <b class="cb num" id="bShow">6</b>. Both start at 0. The numbers each frog lands on are its <b>multiples</b>. The numbers both frogs land on are <b>common multiples</b>.</p>
+  <div class="controls">
+    <label for="fa"><span class="ca">A jumps</span> <select id="fa"></select></label>
+    <label for="fb"><span class="cb">B jumps</span> <select id="fb"></select></label>
+    <button class="primary" id="play">Watch them jump</button>
+  </div>
+  <div class="scroll"><svg id="line" role="img" aria-label="Two frogs jumping along a number line"></svg></div>
+  <div class="result" id="frogResult"></div>
+  <div class="stories">
+    <div><h3>Hot dogs and buns</h3><p>Hot dogs come <span class="num">10</span> to a pack. Buns come <span class="num">8</span> to a pack. To end up with exactly one bun per hot dog, what's the smallest amount? The 10-frog and the 8-frog first meet at <b class="num">40</b>: buy 4 packs of hot dogs and 5 packs of buns.</p></div>
+    <div><h3>Two blinking lights</h3><p>One light blinks every <span class="num">6</span> seconds, another every <span class="num">9</span> seconds. They just blinked together. They'll blink together again in <b class="num">18</b> seconds.</p></div>
+  </div>
+  <p class="why">The big idea: <b>a common multiple is when two rhythms line up again.</b> When a question asks "when is the next time together?" or "what's the least amount that comes out even?", you want the <b>least common multiple (LCM)</b>. It's always at least as big as the larger number, because you're building up.</p>
+</section>
+
+<section id="s3">
+  <span class="eyebrow">Stop 3 · Common factors</span>
+  <h2>In the woodshop: cut two boards into equal pieces</h2>
+  <p>You have two boards. You want to cut <b>both</b> of them into pieces of the same length, with <b>no wood wasted</b>. What's the longest each piece can be? Drag "piece length" and see. Red shows wasted wood.</p>
+  <div class="controls">
+    <label for="ba">Board A <input id="ba" type="number" min="4" max="72" value="24"> in</label>
+    <label for="bb">Board B <input id="bb" type="number" min="4" max="72" value="36"> in</label>
+  </div>
+  <div class="controls">
+    <label for="p">Piece length <input id="p" type="range" min="1" max="24" value="8"> <b class="num" id="pVal">8</b> in</label>
+  </div>
+  <div class="scroll"><svg id="boards" role="img" aria-label="How the two boards are cut"></svg></div>
+  <div class="result" id="boardResult"></div>
+  <div><p class="note" style="margin-bottom:6px">Lengths that waste nothing on either board (tap one to try it):</p><div class="chips" id="cfList"></div></div>
+  <div class="stories">
+    <div><h3>Goodie bags</h3><p><span class="num">18</span> pencils and <span class="num">24</span> erasers go into identical goodie bags, with nothing left over. What's the most bags you can make? The greatest common factor of 18 and 24 is <b class="num">6</b>: 6 bags, each with 3 pencils and 4 erasers.</p></div>
+    <div><h3>Floor tiles</h3><p>A <span class="num">12 × 18</span> floor is covered with equal square tiles, with no cutting. What's the biggest tile? <b class="num">6 × 6</b>, which fits exactly 2 × 3 tiles.</p></div>
+  </div>
+  <p class="why">The big idea: <b>a common factor is one ruler that measures both things exactly.</b> When a question asks "what's the most groups?" or "what's the longest/biggest piece?", you want the <b>greatest common factor (GCF)</b>. It's never bigger than the smaller number, because you're breaking apart.</p>
+</section>
+
+<section id="s4">
+  <span class="eyebrow">Stop 4 · What's underneath</span>
+  <h2>Every number is built from prime blocks</h2>
+  <p>Primes (2, 3, 5, 7, …) are the smallest blocks; they can't be broken apart. Every number can be written as prime blocks multiplied together, and there's only one way to do it. Once you see this, common factors and common multiples turn out to be two sides of the same idea.</p>
+  <div class="controls">
+    <label for="ka">Number A <input id="ka" type="number" min="2" max="200" value="12"></label>
+    <label for="kb">Number B <input id="kb" type="number" min="2" max="200" value="18"></label>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px" id="bricks"></div>
+  <p class="why">The big idea: <b>common factors are made of the blocks both numbers share</b>, so the GCF uses every shared block. <b>A common multiple must hold all the blocks of both numbers</b>, so the LCM takes everything either one needs, and not one block more. Shared blocks get counted only once, which leads to a neat secret: <b>GCF × LCM = A × B</b>.</p>
+</section>
+
+<section id="s5">
+  <span class="eyebrow">Stop 5 · What they're really for</span>
+  <h2>Why learn this at all?</h2>
+  <p>At school, the first place they show up is <b>fractions</b>:</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>What you're doing</th><th>Which one</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><b>Simplifying</b> a fraction to lowest terms</td><td class="cboth">GCF</td><td class="num">12/18 → divide top and bottom by 6 → 2/3</td></tr>
+      <tr><td><b>Adding</b> fractions with different denominators</td><td class="cb">LCM</td><td class="num">1/4 + 1/6 → make both denominators 12 → 3/12 + 2/12 = 5/12</td></tr>
+    </tbody>
+  </table></div>
+  <p>In everyday life, they answer two kinds of questions:</p>
+  <div class="duo">
+    <div><span class="big ca" style="font-size:1.3rem">Breaking apart → common factor</span><p>Grouping, packing bags, cutting material, tiling, lining up in rows. Look for: <b>the most groups, the biggest piece, no waste</b>.</p></div>
+    <div><span class="big cb" style="font-size:1.3rem">Building up → common multiple</span><p>Schedules, buses, blinking lights, buying things that come in packs. Look for: <b>next time together, the least amount, coming out even</b>.</p></div>
+  </div>
+  <p class="why">The deepest reason: <b>you're learning to find a shared unit.</b> Two things have different lengths or different rhythms, and you need one amount that fits both exactly. A woodworker finding a length that divides both boards, a musician finding the beat where two rhythms meet, a student finding a common denominator: it's the same idea every time.</p>
+</section>
+
+<section id="s6">
+  <span class="eyebrow">Stop 6 · Challenge</span>
+  <h2>First decide: break it, or build it?</h2>
+  <p class="note">For each problem, pick which one to use, then see the answer. Score: <span class="score" id="score">0 / 6</span></p>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+<section>
+  <span class="eyebrow">For parents</span>
+  <h3>Three tips for using this page together</h3>
+  <ul style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px">
+    <li>Don't rush to teach the method. <b>Before every problem, ask: "Are we breaking it apart, or building it up?"</b> Once that's right, the arithmetic is the easy part.</li>
+    <li>In Stop 1, have your child drag the slider to 7, 11 and 13, and ask why those only make one long row. Let them explain what "prime" means in their own words.</li>
+    <li>Try it with real things: a box of blocks, two pieces of string, scrap wood. Splitting something by hand once sticks better than ten worksheet problems.</li>
+  </ul>
+</section>
+
+<footer>Other names you may see: the GCF is also called the GCD (greatest common divisor) or HCF (highest common factor). LCM stands for least common multiple. A prime number has exactly two factors: 1 and itself.</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const NS='http://www.w3.org/2000/svg';
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function el(tag,attrs,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e}
+const list=a=>a.length<=1?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+
+/* 1. rectangles */
+function renderRect(){
+  const n=+$('#n').value; $('#nVal').textContent=n;
+  const pairs=[]; for(let r=1;r*r<=n;r++) if(n%r===0) pairs.push([r,n/r]);
+  const box=$('#rects'); box.innerHTML='';
+  pairs.forEach(([r,c])=>{
+    const cell=Math.max(6,Math.min(18,Math.floor(240/c)));
+    const fig=document.createElement('figure'); fig.className='rect';
+    const g=document.createElement('div'); g.className='grid'; g.style.gridTemplateColumns=`repeat(${c},${cell}px)`;
+    for(let i=0;i<n;i++){const d=document.createElement('i');d.style.width=d.style.height=cell+'px';g.appendChild(d)}
+    const cap=document.createElement('figcaption'); cap.textContent=`${r} row${r>1?'s':''} of ${c}`;
+    fig.append(g,cap); box.append(fig);
+  });
+  const fs=[]; for(let i=1;i<=n;i++) if(n%i===0) fs.push(i);
+  $('#factorList').innerHTML=fs.map(f=>`<span class="chip">${f}</span>`).join('');
+  let t;
+  if(n===1) t='1 is special: it only makes a 1 × 1 square, so it has just one factor.';
+  else if(fs.length===2) t=`<b>${n} is a prime number.</b> It only makes one long row. Nothing except 1 and ${n} itself can split it evenly.`;
+  else t=`${n} has <b>${fs.length}</b> factors. Notice they always come in pairs: ${list(pairs.map(([r,c])=>r===c?`${r} × ${c}`:`${r} & ${c}`))}.`;
+  $('#rectNote').innerHTML=t;
+}
+$('#n').addEventListener('input',renderRect);
+
+/* 2. frogs */
+for(const id of ['#fa','#fb']){const s=$(id);for(let i=2;i<=12;i++){const o=document.createElement('option');o.value=i;o.textContent=i;s.append(o)}}
+$('#fa').value=4; $('#fb').value=6;
+let timer=null;
+function frogParams(){const a=+$('#fa').value,b=+$('#fb').value,L=lcm(a,b);let range=Math.min(Math.max(2*L,30),150);if(range<L)range=L;return{a,b,L,range}}
+function drawFrogs(upTo){
+  const {a,b,L,range}=frogParams();
+  const u=range<=40?22:range<=80?13:9;
+  const W=40+range*u, H=210, y=105, x=v=>20+v*u;
+  const svg=$('#line'); svg.innerHTML=''; svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('width',W); svg.setAttribute('height',H);
+  svg.append(el('line',{x1:x(0),y1:y,x2:x(range),y2:y,class:'axis'}));
+  for(let v=0;v<=range;v++){svg.append(el('line',{x1:x(v),y1:y-4,x2:x(v),y2:y+4,class:'tick'}))}
+  const hA=Math.min(70,a*u*.45+12), hB=Math.min(70,b*u*.45+12);
+  for(let v=a;v<=Math.min(upTo,range);v+=a) svg.append(el('path',{d:`M${x(v-a)} ${y} Q${x(v-a/2)} ${y-2*hA} ${x(v)} ${y}`,class:'arcA'}));
+  for(let v=b;v<=Math.min(upTo,range);v+=b) svg.append(el('path',{d:`M${x(v-b)} ${y} Q${x(v-b/2)} ${y+2*hB} ${x(v)} ${y}`,class:'arcB'}));
+  for(let v=0;v<=range;v++){
+    const isA=v%a===0, isB=v%b===0; if(!(isA||isB)) continue;
+    const shown=v<=upTo;
+    if(v>0&&isA&&isB&&shown){
+      svg.append(el('circle',{cx:x(v),cy:y,r:8,class:'dotBoth'}));
+      svg.append(el('text',{x:x(v),y:18,'text-anchor':'middle',class:'both'},v));
+    } else if(shown){
+      if(isA) svg.append(el('circle',{cx:x(v),cy:y-1,r:4,class:'dotA'}));
+      if(isB) svg.append(el('circle',{cx:x(v),cy:y+1,r:4,class:'dotB'}));
+    }
+    if(v===0||u>=13||v%10===0) svg.append(el('text',{x:x(v),y:H-6,'text-anchor':'middle'},v));
+  }
+  svg.append(el('text',{x:6,y:30,class:'lblA'},'A ↷'));
+  svg.append(el('text',{x:6,y:H-28,class:'lblB'},'B ↶'));
+  $('#aShow').textContent=a; $('#bShow').textContent=b;
+  const commons=[]; for(let v=L;v<=range;v+=L) commons.push(v);
+  $('#frogResult').innerHTML=upTo>=range
+    ?`Stones both frogs land on: <b class="num">${commons.join(', ')}</b>… and on forever (there are infinitely many common multiples). They first meet at <b class="num cboth">${L}</b>. That's the <b>least common multiple (LCM)</b> of ${a} and ${b}.`
+    :'Jumping…';
+}
+function playFrogs(){
+  clearInterval(timer);
+  const {range}=frogParams();
+  if(reduce){drawFrogs(range);return}
+  let cur=0; drawFrogs(0);
+  timer=setInterval(()=>{cur+=1;drawFrogs(cur);if(cur>=range)clearInterval(timer)},range>80?40:70);
+}
+$('#play').addEventListener('click',playFrogs);
+for(const id of ['#fa','#fb']) $(id).addEventListener('change',()=>{clearInterval(timer);drawFrogs(1e9)});
+
+/* 3. boards */
+function clampInput(e,lo,hi,def){let v=Math.round(+e.value);if(!isFinite(v)||v<lo||v>hi){v=Math.min(hi,Math.max(lo,isFinite(v)?v:def))}return v}
+function renderBoards(){
+  const A=clampInput($('#ba'),4,72,24), B=clampInput($('#bb'),4,72,36);
+  const pEl=$('#p'); pEl.max=Math.min(A,B); if(+pEl.value>Math.min(A,B)) pEl.value=Math.min(A,B);
+  const p=+pEl.value; $('#pVal').textContent=p;
+  const g=gcd(A,B), maxL=Math.max(A,B), W=760, s=(W-90)/maxL, H=150;
+  const svg=$('#boards'); svg.innerHTML=''; svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('width',W); svg.setAttribute('height',H);
+  [[A,30,'A'],[B,95,'B']].forEach(([len,y,name])=>{
+    const q=Math.floor(len/p), r=len%p, x0=60;
+    svg.append(el('text',{x:8,y:y+22,class:'bl'},`${name} ${len}in`));
+    for(let i=0;i<q;i++) svg.append(el('rect',{x:x0+i*p*s,y,width:p*s,height:34,class:i%2?'wood2':'wood1'}));
+    if(r>0){svg.append(el('rect',{x:x0+q*p*s,y,width:r*s,height:34,class:'waste'}));svg.append(el('text',{x:x0+q*p*s+r*s/2,y:y-6,'text-anchor':'middle',class:'wl'},`waste ${r}`))}
+    for(let i=1;i<=q;i++) if(i<q||r>0) svg.append(el('line',{x1:x0+i*p*s,y1:y-3,x2:x0+i*p*s,y2:y+37,class:'cut'}));
+  });
+  const ra=A%p, rb=B%p;
+  const piece=(len,r)=>`${len} ÷ ${p} = ${Math.floor(len/p)} pieces${r?`, <span class="cw">${r} left over</span>`:', exactly'}`;
+  let msg=`A: ${piece(A,ra)}. B: ${piece(B,rb)}.<br>`;
+  if(ra||rb) msg+=`Some wood is wasted: ${p} is not a factor of ${ra&&rb?`${A} or ${B}`:ra?A:B}.`;
+  else if(p===g) msg+=`<b class="cboth">No waste on either board, and this is the longest possible cut!</b> ${p} is the <b>greatest common factor (GCF)</b> of ${A} and ${B}.`;
+  else msg+=`No waste on either board ✓ ${p} is a <b>common factor</b> of ${A} and ${B}. But you can cut longer pieces.`;
+  $('#boardResult').innerHTML=msg;
+  const cf=[]; for(let i=1;i<=g;i++) if(A%i===0&&B%i===0) cf.push(i);
+  $('#cfList').innerHTML=cf.map(c=>`<button class="chip${c===g?' best':''}" data-p="${c}">${c}${c===g?' longest':''}</button>`).join('');
+}
+$('#p').addEventListener('input',renderBoards);
+for(const id of ['#ba','#bb']) $(id).addEventListener('change',renderBoards);
+$('#cfList').addEventListener('click',e=>{const t=e.target.closest('[data-p]');if(!t)return;$('#p').value=t.dataset.p;renderBoards()});
+
+/* 4. prime bricks */
+function factorize(n){const out=[];for(let p=2;p*p<=n;p++)while(n%p===0){out.push(p);n/=p}if(n>1)out.push(n);return out}
+const cls=p=>({2:'b2',3:'b3',5:'b5',7:'b7'})[p]||'bx';
+const bricks=arr=>arr.length?arr.map(p=>`<span class="brick ${cls(p)}">${p}</span>`).join(''):'<span class="note">(no shared blocks, so the only common factor is 1)</span>';
+function renderBricks(){
+  const A=clampInput($('#ka'),2,200,12), B=clampInput($('#kb'),2,200,18);
+  const fa=factorize(A), fb=factorize(B);
+  const shared=[], rest=[...fb];
+  fa.forEach(p=>{const i=rest.indexOf(p);if(i>=0){shared.push(p);rest.splice(i,1)}});
+  const union=[...fa,...rest].sort((x,y)=>x-y);
+  const prod=a=>a.reduce((x,y)=>x*y,1);
+  const g=prod(shared), l=prod(union);
+  $('#bricks').innerHTML=`
+    <div class="brickrow"><span class="tag ca">A = ${A}</span>${bricks(fa)}</div>
+    <div class="brickrow"><span class="tag cb">B = ${B}</span>${bricks(fb)}</div>
+    <div class="brickrow"><span class="tag cboth">Shared by both</span>${bricks(shared)}<span class="eq">→ GCF = <b>${g}</b></span></div>
+    <div class="brickrow"><span class="tag">Holds them all</span>${bricks(union)}<span class="eq">→ LCM = <b>${l}</b></span></div>
+    <p class="note num">Check: ${g} × ${l} = ${g*l}, and ${A} × ${B} = ${A*B}${g*l===A*B?'. The same!':''}</p>`;
+}
+for(const id of ['#ka','#kb']) $(id).addEventListener('change',renderBricks);
+
+/* 5. quiz */
+const Q=[
+  {q:'You have 32 blue blocks and 24 yellow blocks. You split them into identical bags and use them all. What is the most bags you can make?',k:'f',ans:'8 bags, each with 4 blue and 3 yellow.',why:'Splitting things into groups and asking for "the most groups" means breaking apart: find the GCF of 32 and 24.'},
+  {q:'Bus 1 leaves every 15 minutes. Bus 2 leaves every 20 minutes. Both leave at 8:00. When do they next leave together?',k:'m',ans:'9:00 (60 minutes later).',why:'"Next time together" for two rhythms means building up: find the LCM of 15 and 20.'},
+  {q:'A 48 cm × 30 cm board is cut into equal squares with no waste. What is the largest possible side length?',k:'f',ans:'6 cm, giving exactly 8 × 5 = 40 squares.',why:'"Largest" and "no waste" mean breaking apart: find the GCF of 48 and 30.'},
+  {q:'Hot dogs come 10 to a pack and buns come 8 to a pack. What is the fewest packs of each you can buy to have exactly the same number?',k:'m',ans:'4 packs of hot dogs and 5 packs of buns: 40 of each.',why:'"The least amount that comes out even" means building up: find the LCM of 10 and 8.'},
+  {q:'One light blinks every 6 seconds, another every 9 seconds. They just blinked together. How many seconds until they blink together again?',k:'m',ans:'18 seconds.',why:'Two rhythms lining up again means building up: find the LCM of 6 and 9.'},
+  {q:'A teacher has 36 pencils and 27 erasers to pack into identical prize bags, using them all. What is the most bags she can make?',k:'f',ans:'9 bags, each with 4 pencils and 3 erasers.',why:'Grouping and "the most groups" means breaking apart: find the GCF of 36 and 27.'}
+];
+const done=new Map();
+function renderQuiz(){
+  $('#quiz').innerHTML=Q.map((x,i)=>`<div class="q" data-i="${i}"><p><b class="num">${i+1}.</b> ${x.q}</p><div class="btns"><button data-k="f">Break it: common factor</button><button data-k="m">Build it: common multiple</button></div><div class="fb" hidden></div></div>`).join('');
+}
+$('#quiz').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-k]'); if(!btn) return;
+  const box=btn.closest('.q'), i=+box.dataset.i, x=Q[i], ok=btn.dataset.k===x.k;
+  if(!done.has(i)) done.set(i,ok);
+  const fb=box.querySelector('.fb'); fb.hidden=false; fb.className='fb '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'<b>Right!</b> ':'<b>Think again:</b> ')+x.why+(ok?` Answer: <b>${x.ans}</b>`:'');
+  const right=[...done.values()].filter(Boolean).length;
+  $('#score').textContent=`${right} / ${Q.length}`;
+});
+
+renderRect(); drawFrogs(1e9); renderBoards(); renderBricks(); renderQuiz();
+</script>
+
+<script>
+new MutationObserver(()=>{const m=(document.getElementById('score').textContent||'').match(/(\d+)\s*\/\s*(\d+)/);if(m&&+m[1]>=+m[2]-1){try{localStorage.setItem('star:factors-multiples','1')}catch(e){}}}).observe(document.getElementById('score'),{childList:true,characterData:true,subtree:true});
+</script>
+</body>
+</html>
