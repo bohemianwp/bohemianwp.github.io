@@ -1,13 +1,80 @@
 [
   {
+    "id": "comparing-fractions",
+    "zh": "比较分数",
+    "en": "Comparing Fractions",
+    "book": "4A",
+    "chapter": 6,
+    "chapterTitle": {
+      "zh": "分数",
+      "en": "Fractions"
+    },
+    "lesson": 2,
+    "learned": [
+      "2026-11-01"
+    ],
+    "terms": [
+      "分数",
+      "fraction",
+      "比较",
+      "比大小",
+      "compare",
+      "分子",
+      "numerator",
+      "分母",
+      "denominator",
+      "通分",
+      "公分母",
+      "common denominator",
+      "等值分数",
+      "equivalent fractions",
+      "一半",
+      "half",
+      "benchmark",
+      "大于",
+      "小于",
+      "greater than",
+      "less than"
+    ],
+    "summary": {
+      "zh": "四种方法：同分母比分子、同分子比分母、跟一半比、通分。",
+      "en": "Four ways: same denominator, same numerator, compare with one half, common denominator."
+    }
+  },
+  {
     "id": "factors-multiples",
     "zh": "公因数与公倍数",
     "en": "Common Factors and Common Multiples",
     "book": "课外",
     "chapter": 0,
-    "chapterTitle": {"zh": "课外补充", "en": "Extra topics"},
-    "learned": ["2026-10-31"],
-    "terms": ["因数", "factor", "倍数", "multiple", "公因数", "common factor", "公倍数", "common multiple", "最大公因数", "GCF", "GCD", "HCF", "最小公倍数", "LCM", "质数", "prime"],
-    "summary": {"zh": "拆还是凑？公因数是「拆」，公倍数是「凑」。", "en": "Break it or build it? Common factors break apart; common multiples build up."}
+    "chapterTitle": {
+      "zh": "课外补充",
+      "en": "Extra topics"
+    },
+    "learned": [
+      "2026-10-31"
+    ],
+    "terms": [
+      "因数",
+      "factor",
+      "倍数",
+      "multiple",
+      "公因数",
+      "common factor",
+      "公倍数",
+      "common multiple",
+      "最大公因数",
+      "GCF",
+      "GCD",
+      "HCF",
+      "最小公倍数",
+      "LCM",
+      "质数",
+      "prime"
+    ],
+    "summary": {
+      "zh": "拆还是凑？公因数是「拆」，公倍数是「凑」。",
+      "en": "Break it or build it? Common factors break apart; common multiples build up."
+    }
   }
 ]
