@@ -240,5 +240,132 @@
     "en": "5/6 = 10/12, so 7/12 is smaller."
    }
   }
+ ],
+ "improper-mixed": [
+  {
+   "q": {
+    "zh": "2 = ?（用六分之一来数）",
+    "en": "2 = ? (count in sixths)"
+   },
+   "choices": [
+    {
+     "zh": "2/6",
+     "en": "2/6"
+    },
+    {
+     "zh": "12/6",
+     "en": "12/6"
+    },
+    {
+     "zh": "8/6",
+     "en": "8/6"
+    }
+   ],
+   "answer": 1,
+   "why": {
+    "zh": "每个整的有 6 份，2 个整的是 12 份。",
+    "en": "Each whole has 6 parts; 2 wholes are 12 parts."
+   }
+  },
+  {
+   "q": {
+    "zh": "5/3 = 3/3 + 2/3 = ?",
+    "en": "5/3 = 3/3 + 2/3 = ?"
+   },
+   "choices": [
+    {
+     "zh": "1²⁄₃",
+     "en": "1²⁄₃"
+    },
+    {
+     "zh": "2²⁄₃",
+     "en": "2²⁄₃"
+    },
+    {
+     "zh": "5¹⁄₃",
+     "en": "5¹⁄₃"
+    }
+   ],
+   "answer": 0,
+   "why": {
+    "zh": "3/3 凑满 1 个整的，再加 2/3。",
+    "en": "3/3 fills 1 whole, plus 2/3."
+   }
+  },
+  {
+   "q": {
+    "zh": "哪个是假分数？",
+    "en": "Which one is an improper fraction?"
+   },
+   "choices": [
+    {
+     "zh": "3/4",
+     "en": "3/4"
+    },
+    {
+     "zh": "5/5",
+     "en": "5/5"
+    },
+    {
+     "zh": "1¹⁄₂",
+     "en": "1¹⁄₂"
+    }
+   ],
+   "answer": 1,
+   "why": {
+    "zh": "等于 1 也算假分数。",
+    "en": "Equal to 1 counts as improper."
+   }
+  },
+  {
+   "q": {
+    "zh": "哪个不是写好的带分数？",
+    "en": "Which is NOT a properly written mixed number?"
+   },
+   "choices": [
+    {
+     "zh": "2¹⁄₄",
+     "en": "2¹⁄₄"
+    },
+    {
+     "zh": "1⁵⁄₄",
+     "en": "1⁵⁄₄"
+    },
+    {
+     "zh": "3²⁄₃",
+     "en": "3²⁄₃"
+    }
+   ],
+   "answer": 1,
+   "why": {
+    "zh": "5/4 已经满 1 了，带分数的分数部分要比 1 小。",
+    "en": "5/4 is already more than 1; the fraction part must be less than 1."
+   }
+  },
+  {
+   "q": {
+    "zh": "3 − 1/5 = ?",
+    "en": "3 − 1/5 = ?"
+   },
+   "choices": [
+    {
+     "zh": "3¹⁄₅",
+     "en": "3¹⁄₅"
+    },
+    {
+     "zh": "2¹⁄₅",
+     "en": "2¹⁄₅"
+    },
+    {
+     "zh": "2⁴⁄₅",
+     "en": "2⁴⁄₅"
+    }
+   ],
+   "answer": 2,
+   "why": {
+    "zh": "3 拆成 2 和 5/5，5/5 − 1/5 = 4/5。",
+    "en": "Split 3 into 2 and 5/5; 5/5 − 1/5 = 4/5."
+   }
+  }
  ]
 }

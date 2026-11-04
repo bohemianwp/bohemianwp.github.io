@@ -42,6 +42,42 @@
     }
   },
   {
+    "id": "improper-mixed",
+    "zh": "假分数与带分数",
+    "en": "Improper Fractions and Mixed Numbers",
+    "book": "4A",
+    "chapter": 6,
+    "chapterTitle": {
+      "zh": "分数",
+      "en": "Fractions"
+    },
+    "lesson": 3,
+    "learned": [
+      "2026-11-03"
+    ],
+    "terms": [
+      "假分数",
+      "improper fraction",
+      "带分数",
+      "mixed number",
+      "真分数",
+      "proper fraction",
+      "整数",
+      "whole number",
+      "数轴",
+      "number line",
+      "分数",
+      "fraction",
+      "一又三分之二",
+      "最简",
+      "simplest form"
+    ],
+    "summary": {
+      "zh": "过了 1 接着数：一直数份数是假分数，先数整的再数零头是带分数。",
+      "en": "Counting past 1: keep counting parts (improper fraction), or wholes first, then the part (mixed number)."
+    }
+  },
+  {
     "id": "factors-multiples",
     "zh": "公因数与公倍数",
     "en": "Common Factors and Common Multiples",
