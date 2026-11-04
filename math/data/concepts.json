@@ -1,5 +1,82 @@
 [
   {
+    "id": "multiply-1digit",
+    "zh": "两位数乘一位数",
+    "en": "Multiplying a 2-Digit Number by a 1-Digit Number",
+    "book": "3A",
+    "chapter": 5,
+    "lesson": 1,
+    "chapterTitle": {
+      "zh": "乘法",
+      "en": "Multiplication"
+    },
+    "learned": [],
+    "terms": [
+      "乘法",
+      "multiply",
+      "multiplication",
+      "拆开乘",
+      "split",
+      "个位",
+      "ones",
+      "十位",
+      "tens",
+      "百位",
+      "hundreds",
+      "进位",
+      "regroup",
+      "满十进一",
+      "数位圆片",
+      "place-value discs",
+      "心算",
+      "mental math",
+      "竖式"
+    ],
+    "summary": {
+      "zh": "两位数为什么可以拆开乘？切一刀，圆点一个没少。",
+      "en": "Why can we split to multiply? Cut once: not a single dot is lost."
+    }
+  },
+  {
+    "id": "multiply-2digit",
+    "zh": "乘整十数与乘两位数",
+    "en": "Multiplying by Multiples of 10 and by 2-Digit Numbers",
+    "book": "4A",
+    "chapter": 4,
+    "lesson": 5,
+    "chapterTitle": {
+      "zh": "乘法",
+      "en": "Multiplication"
+    },
+    "learned": [
+      "2026-10"
+    ],
+    "terms": [
+      "乘法",
+      "multiply",
+      "multiplication",
+      "整十数",
+      "multiple of 10",
+      "两位数",
+      "2-digit",
+      "数位",
+      "place value",
+      "数位圆片",
+      "place-value discs",
+      "部分积",
+      "partial product",
+      "进位",
+      "regroup",
+      "估算",
+      "estimate",
+      "竖式"
+    ],
+    "summary": {
+      "zh": "零是从哪来的？乘 10，每个圆片升一位。",
+      "en": "Where does the zero come from? Times 10, every disc moves up a place."
+    }
+  },
+  {
     "id": "comparing-fractions",
     "zh": "比较分数",
     "en": "Comparing Fractions",

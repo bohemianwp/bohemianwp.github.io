@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Multiplying a 2-Digit Number by a 1-Digit Number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;700&family=Noto+Sans+SC:wght@400;600&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+/* Why a 2-digit number can be split: cut an array, multiply each place with discs, regroup, and see the algorithm come from it. */
+:root{--red:#d6413a;--dotA:#e8463c;--dotB:#f2b53a}
+@media (prefers-color-scheme:dark){:root{--red:#ff6b5e}}
+[hidden]{display:none!important}
+.wrap{display:flex;flex-direction:column;gap:24px}
+h1{font-size:clamp(2rem,7vw,3rem)}
+h2{font-size:1.5rem}
+p{margin:0}
+.eyebrow{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+header{display:flex;flex-direction:column;gap:12px;padding-top:6px}
+header .lead{font-size:1.08rem;color:var(--muted);max-width:62ch}
+section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px clamp(16px,4vw,26px);display:flex;flex-direction:column;gap:14px}
+.why{border-left:4px solid var(--both);padding:2px 0 2px 14px}
+.why b{color:var(--both)}
+.red{color:var(--red)}
+.num{font-family:"Fredoka",ui-rounded,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+button{font:inherit;font-weight:600;cursor:pointer;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 16px}
+button:hover{border-color:var(--a)}
+button.on,button.primary{background:var(--a);color:var(--paper);border-color:var(--a)}
+button:disabled{opacity:.4;cursor:default}
+.presets{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.presets button{padding:4px 12px;font-family:"Fredoka",system-ui,sans-serif}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:"Fredoka",system-ui,sans-serif;fill:var(--muted);font-size:15px}
+.disc{transition:transform .6s ease,opacity .6s ease;transform-box:fill-box;transform-origin:center}
+.pop{animation:pop .45s ease-out both}
+@keyframes pop{from{opacity:0;transform:scale(.2)}}
+@media (prefers-reduced-motion:reduce){.disc{transition:none}.pop{animation:none}}
+.eq{font-family:"Fredoka",system-ui,sans-serif;font-size:1.3rem;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.result{background:var(--soft-both);border-radius:12px;padding:14px;font-size:1.12rem;display:flex;flex-direction:column;gap:8px}
+.ask{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--soft-a);border-radius:12px;padding:10px 14px;font-weight:600}
+.split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px;align-items:start}
+@media (max-width:640px){.split{grid-template-columns:1fr}}
+.vf{display:inline-grid;justify-content:start;align-items:center;font-family:"Fredoka",system-ui,sans-serif;font-size:clamp(1.3rem,6.5vw,1.7rem);row-gap:2px;background:var(--bg);border-radius:12px;padding:12px 16px}
+.vf span{text-align:center;min-width:1.15em}
+.vf .hd{font-size:.8rem;font-weight:600}
+.vf .cy{font-size:.85rem;color:var(--red);height:1.1em;line-height:1.1em}
+.vf .lbl{font-size:.8rem;color:var(--muted);text-align:left;padding-left:10px;white-space:nowrap}
+.vf .ln{border-top:2px solid var(--ink);height:0;margin:3px 0}
+.vf .cur{background:var(--soft-a);border-radius:6px}
+.cap{font-size:1.08rem;min-height:3em}
+.steps{display:grid;gap:10px}
+.step{border:1px dashed var(--line);border-radius:12px;padding:12px 14px}
+.step h3{font-size:1.05rem;margin-bottom:4px}
+.order{background:var(--soft-a);border-radius:12px;padding:12px 14px}
+.err{border-left:4px solid var(--b);padding:2px 0 2px 14px}
+.err b{color:var(--b)}
+.quiz{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.q .btns{display:flex;gap:8px;flex-wrap:wrap}
+.q .btns button{min-width:3em}
+.fb{border-radius:10px;padding:8px 12px}
+.q button.pickok{background:var(--both);color:var(--paper);border-color:var(--both)} .q button.pickno{background:var(--b);color:var(--paper);border-color:var(--b)}
+.fb.ok{background:var(--soft-both)} .fb.no{background:var(--soft-b)}
+.note{color:var(--muted);font-size:.92rem}
+ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+footer{color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a id="back" href="../index.html?lang=en"></a>
+  <span class="pill"><a id="tozh" href="multiply-1digit.zh.html">中文</a><a id="toen" href="multiply-1digit.en.html">English</a></span>
+</div></div>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow" data-t="eyebrow"></span>
+  <h1 data-t="h1"></h1>
+  <p class="lead" data-t="lead"></p>
+  <p class="why" data-t="oneLine"></p>
+</header>
+
+<section>
+  <span class="eyebrow" data-t="whyEye"></span>
+  <p data-t="whyText"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="s1Eye"></span>
+  <h2 data-t="s1H"></h2>
+  <p class="note" data-t="s1Note"></p>
+  <div class="presets"><span class="note" data-t="pickOne"></span><span id="pre1" style="display:contents"></span></div>
+  <div class="controls"><button id="cutL" data-t="cutL"></button><button id="cutR" data-t="cutR"></button><button id="cut10" data-t="cut10"></button></div>
+  <svg id="dots" viewBox="0 0 640 240" role="img"></svg>
+  <div class="eq" id="eq1"></div>
+  <div class="ask" id="ask1"><span data-t="ask1"></span><button class="primary" id="rev1" data-t="reveal"></button></div>
+  <div class="result" id="res1"></div>
+  <p class="why" data-t="s1Why"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="s2Eye"></span>
+  <h2 data-t="s2H"></h2>
+  <p class="note" data-t="s2Note"></p>
+  <div class="presets"><span class="note" data-t="pickOne"></span><span id="pre2" style="display:contents"></span></div>
+  <svg id="pv2" viewBox="0 0 640 300" role="img"></svg>
+  <div class="eq" id="eq2"></div>
+  <div class="controls"><button class="primary" id="reg2" data-t="regBtn"></button></div>
+  <div class="ask" id="ask2"><span data-t="ask2"></span><button class="primary" id="rev2" data-t="reveal"></button></div>
+  <div class="result" id="res2"></div>
+  <p class="why" data-t="s2Why"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="s3Eye"></span>
+  <h2 data-t="s3H"></h2>
+  <p class="note" data-t="s3Note"></p>
+  <div class="presets"><span class="note" data-t="pickOne"></span><span id="pre3" style="display:contents"></span></div>
+  <div class="split">
+    <svg id="pv3" viewBox="0 0 640 320" role="img"></svg>
+    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+      <div class="vf" id="vf3"></div>
+    </div>
+  </div>
+  <p class="cap" id="cap3"></p>
+  <div class="controls"><button class="primary" id="next3"></button><button id="reset3" data-t="restart"></button></div>
+  <div class="result" id="res3"></div>
+  <p class="why" data-t="s3Why"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="exEye"></span>
+  <h2 data-t="exH"></h2>
+  <div class="steps" id="steps"></div>
+  <div class="order" data-t="order"></div>
+  <p class="note" data-t="bookNote"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="errEye"></span>
+  <h2 data-t="errH"></h2>
+  <div id="errs" style="display:flex;flex-direction:column;gap:12px"></div>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="quizEye"></span>
+  <h2 data-t="quizH"></h2>
+  <p class="note"><span data-t="score"></span> <b class="num" id="score">0 / 8</b> · <span data-t="scoreRule"></span></p>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="sayEye"></span>
+  <p data-t="say"></p>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="relEye"></span>
+  <ul id="rel"></ul>
+  <span class="eyebrow" data-t="logEye"></span>
+  <ul id="log"></ul>
+</section>
+
+<section>
+  <span class="eyebrow" data-t="parentEye"></span>
+  <ul id="parent"></ul>
+</section>
+
+<footer data-t="foot"></footer>
+</div>
+
+<script>
+const LANG = document.documentElement.lang === 'en' ? 'en' : 'zh';
+const ID = 'multiply-1digit';
+const fmt = n => n.toLocaleString('en-US');
+const S = {
+zh: {
+  back: '← 目录',
+  eyebrow: '3A 第 5 章 · 乘法 · 第 1–4 课 · Multiplying Ones, Tens, and Hundreds / Multiplication with Regrouping',
+  h1: '两位数，为什么可以拆开乘？',
+  lead: '4 × 12 怎么算？12 的乘法口诀没学过。书上的办法是：摆出 4 行圆点，每行 12 个，<b>在中间切一刀</b>——左边 4 × 10，右边 4 × 2。圆点一个没多、一个没少，所以 <b>4 × 12 = 4 × 10 + 4 × 2</b>。',
+  oneLine: '一句话：<b>把一个数拆成「几十」和「几」，分别乘，再加起来，总数不变。</b>竖式里先乘个位、再乘十位，就是这一刀切出来的。',
+  whyEye: '为什么要学',
+  whyText: '乘法口诀只到 9 × 9。超过 9 的数，靠的就是「拆开乘」：拆成几十和几，每一块都能用口诀算。以后的竖式乘法、乘两位数（四年级）、心算，全都从这里来。弄懂了这一刀，竖式里每一步写在哪、为什么要进位，就都有道理。',
+  s1Eye: '动手 · 切一刀（第 5 章开篇）',
+  s1H: '圆点一个没少，只是分成两块',
+  s1Note: '用「往左切」「往右切」移动那条虚线，看看能切成哪两块。<b>先算一算两块各有几个，再看答案。</b>',
+  pickOne: '选一道题：',
+  cutL: '← 往左切', cutR: '往右切 →', cut10: '切成 10 和几',
+  ask1: '先算一算：两块各有几个？加起来是多少？',
+  reveal: '我算好了，看答案',
+  restart: '从头来',
+  tenNote: '切成 <b>10 和几</b> 最好算：乘 10，一下就出来。',
+  s1Why: '为什么可以拆开乘？<b>圆点就这么多，切一刀不会多也不会少。</b>所以不管从哪切，两块加起来都一样。书上第二幅图把 12 × 4 切成 6 和 6，也是这个道理。',
+  s2Eye: '动手 · 个、十、百乘一位数（第 1 课）',
+  s2H: '5 × 3 = 15 没变，变的是「单位」',
+  s2Note: '选一道题，看圆片：3 组 5 个「一」、3 组 5 个「十」、3 组 5 个「百」。满 10 个就换成 1 个上一位的圆片。',
+  units: ['一', '十', '百', '千'],
+  regBtn: '满十换一',
+  ask2: '先想一想：这是多少？',
+  s2Why: '<b>5 个一 × 3 = 15 个一，5 个十 × 3 = 15 个十，5 个百 × 3 = 15 个百。</b>口诀 5 × 3 = 15 一点没变，只是算的东西从「一」变成了「十」「百」。所以 50 × 3 = 150：15 个十。',
+  s3Eye: '动手 · 两位数乘一位数（第 2–4 课）',
+  s3H: '个位、十位，分开乘',
+  s3Note: '按下面的蓝色按钮，一步一步来：先乘个位，再乘十位。个位满 10 个，就换成 1 个十，先放在十位上面等着。',
+  btn: {
+    mulO: C => `个位：${C.oa} 个一 × ${C.k}`,
+    regO: () => '个位满十：换成十',
+    mulT: C => `十位：${C.ta} 个十 × ${C.k}`,
+    addC: () => '加上进上来的十',
+    regT: () => '十位满十：换成百',
+    end: () => '看看另外两种写法'
+  },
+  cap0: C => `${C.a} 是 ${C.ta} 个十、${C.oa} 个一。先乘个位。`,
+  cap: {
+    mulO: C => `${C.oa} 个一 × ${C.k} = ${C.oa * C.k} 个一。` + (C.oa * C.k >= 10 ? '满 10 个了，要换。' : `个位写 ${C.oa * C.k}。`),
+    regO: C => `${C.oa * C.k} 个一 = ${Math.floor(C.oa * C.k / 10)} 个十 ${C.oa * C.k % 10} 个一。个位写 ${C.oa * C.k % 10}；换来的十先放在十位上面，竖式里记一个小 <span class="red">${Math.floor(C.oa * C.k / 10)}</span>。`,
+    mulT: C => `${C.ta} 个十 × ${C.k} = ${C.ta * C.k} 个十。` + (C.carry0 ? ' <b>上面那个进上来的十，是乘个位得来的——不要再乘一次。</b>' : ''),
+    addC: C => `${C.ta * C.k} 个十 + ${C.carry0} 个十 = ${C.ta * C.k + C.carry0} 个十。`,
+    regT: C => { const t = C.ta * C.k + C.carry0; return `${t} 个十 = ${Math.floor(t / 10)} 个百 ${t % 10} 个十。`; },
+    end: C => `${C.a} × ${C.k} = <b>${fmt(C.a * C.k)}</b>。`
+  },
+  pp: '竖式也可以把两块分开写，再加起来：',
+  mental: C => `心算：把 ${C.a} 拆成 ${C.ta * 10} 和 ${C.oa}，${C.a} × ${C.k} = ${C.ta * 10 * C.k} + ${C.oa * C.k} = <b>${fmt(C.a * C.k)}</b>。`,
+  same: '三种写法，其实是同一件事：<b>拆成几十和几，分别乘，再加起来</b>——就是开头那一刀。',
+  s3Why: '为什么进上来的十不能再乘？<b>它已经是乘过的结果</b>（个位 × 一位数得来的），只要加进十位就行。再乘一次，就多算了。',
+  hd: ['百', '十', '个'],
+  exEye: '书上的例子',
+  exH: '对照课本看',
+  steps: [
+    ['① 4 × 12（第 139 页）', '12 拆成 10 和 2：4 × 10 = 40，4 × 2 = 8，40 + 8 = <b>48</b>。也可以把 12 拆成 6 和 6：6 × 4 = 24，24 + 24 = <b>48</b>。拆法不同，答案一样。'],
+    ['② 50 × 3（第 140 页）', '5 个十 × 3 = 15 个十 = 1 个百 5 个十 = <b>150</b>。'],
+    ['③ 32 × 3（第 144–145 页）', '方法 1：30 × 3 = 90，2 × 3 = 6，90 + 6 = <b>96</b>。方法 2：先乘个位 2 × 3 = 6，再乘十位 3 个十 × 3 = 9 个十，直接写在十位上：<b>96</b>。'],
+    ['④ 42 × 3（第 148–149 页）', '个位 2 × 3 = 6；十位 4 个十 × 3 = 12 个十 = 1 个百 2 个十。答案 <b>126</b>。心算：120 + 6。'],
+    ['⑤ 24 × 3（第 152–153 页）', '个位 4 × 3 = 12 个一 = 1 个十 2 个一，个位写 2，1 个十进到十位上面。十位 2 个十 × 3 = 6 个十，<b>再加上进上来的 1 个十</b> = 7 个十。答案 <b>72</b>。']
+  ],
+  order: '<b>这一页的要点：</b>① 一个数可以拆成几块，分别乘再加起来，总数不变；② 拆成「几十」和「几」最方便；③ 5 个十 × 3 = 15 个十——口诀不变，单位跟着走；④ 满十换一：10 个一换 1 个十，10 个十换 1 个百；⑤ 进上来的数是乘过的，只加不乘。',
+  bookNote: '内容按 Dimensions Math 3A 第 5 章第 1–4 课的课本页面整理（这几课的教参页还没对照）。',
+  errEye: '常见错误',
+  errH: '这几个坑，很多人踩过',
+  errs: [
+    '<b>50 × 3 = 15 ✗</b> 是 15 个<b>十</b>，就是 150。',
+    '<b>32 × 3 = 36 ✗</b> 只乘了个位。十位上的 3 个十也要乘 3：9 个十。答案 96。',
+    '<b>24 × 3 = 62 ✗</b> 忘了加进上来的 1 个十。6 个十 + 1 个十 = 7 个十，答案 72。',
+    '<b>24 × 3 = 92 ✗</b> 把进上来的 1 个十也乘了 3（2 + 1 = 3，3 × 3 = 9）。进上来的十是乘个位得来的，只加不乘。'
+  ],
+  quizEye: '小测验', quizH: '在脑子里摆一摆圆片', score: '答对：', scoreRule: '第一次就答对才算分',
+  right: '对了！', again: '再想想：',
+  sayEye: '用你自己的话说一说',
+  say: '拿 3 张纸，每张画 13 个点。用一把尺子在每张的第 10 个点后面画一条线。讲给爸爸听：为什么 13 × 3 = 10 × 3 + 3 × 3。',
+  relEye: '相关概念',
+  rel: ['下一步：<a href="multiply-2digit.zh.html">乘整十数与乘两位数</a>（4A 第 4 章）：一样的拆法，拆的是乘数', '<a href="factors-multiples.zh.html">公因数与公倍数</a>：倍数就是一个数乘 1、2、3……'],
+  logEye: '学习记录',
+  log: ['3A 第 5 章 第 1–4 课 · 一位数乘法（拆开乘、满十进位）'],
+  star: '小测验已得 ★',
+  parentEye: '写给爸爸妈妈',
+  parent: ['这一页的核心是「切一刀」：数学上叫乘法分配律（distributive property），三年级不用说这个词，让孩子自己切、自己看出「总数不变」就够了。', '家里没有圆片，可以用硬币或三种颜色的纸片。让孩子<b>亲手</b>把 10 个一换成 1 个十。', '孩子竖式出错时，别急着纠正步骤，先问一句：「这一位是几个什么？」——是几个一、几个十，还是几个百。'],
+  foot: '学校里常见的英文：multiply 乘 · product 积 · ones 个位 · tens 十位 · hundreds 百位 · thousands 千位 · regroup 进位（满十换一）· place-value discs 数位圆片 · number bond 拆数图 · mental math 心算 · split 拆开。'
+},
+en: {
+  back: '← Contents',
+  eyebrow: '3A Chapter 5 · Multiplication · Lessons 1–4 · 两位数乘一位数',
+  h1: 'Why can we split a 2-digit number to multiply?',
+  lead: 'How do we find 4 × 12? Our times tables stop at 10. The book lays out 4 rows of 12 dots and <b>makes one cut</b>: 4 × 10 on the left, 4 × 2 on the right. Not a single dot is added or lost, so <b>4 × 12 = 4 × 10 + 4 × 2</b>.',
+  oneLine: 'In one line: <b>split a number into tens and ones, multiply each part, then add. The total does not change.</b> Multiplying the ones and then the tens in the algorithm comes from this one cut.',
+  whyEye: 'Why learn this',
+  whyText: 'Times tables only go so far. For bigger numbers we split: into tens and ones, so each part can be done with facts we know. The written algorithm, multiplying by 2-digit numbers (grade 4), and mental math all grow from here. Once the cut makes sense, every step of the algorithm, where each digit goes and why we regroup, has a reason.',
+  s1Eye: 'Hands-on · make a cut (Chapter 5 opener)',
+  s1H: 'Same dots, just in two parts',
+  s1Note: 'Use "Cut left" and "Cut right" to move the dashed line and see which two parts you get. <b>Work out each part first, then check.</b>',
+  pickOne: 'Pick one:',
+  cutL: '← Cut left', cutR: 'Cut right →', cut10: 'Cut into 10 and the rest',
+  ask1: 'Work it out first: how many in each part? How many in all?',
+  reveal: 'I worked it out, show me',
+  restart: 'Start over',
+  tenNote: 'Cutting into <b>10 and the rest</b> is the easiest: times 10 is quick.',
+  s1Why: 'Why can we split? <b>There are only so many dots; a cut does not add or remove any.</b> So wherever you cut, the two parts add up to the same total. The book\'s second picture cuts 12 × 4 into 6 and 6; same idea.',
+  s2Eye: 'Hands-on · multiplying ones, tens, hundreds (Lesson 1)',
+  s2H: '5 × 3 = 15 stays the same; the unit changes',
+  s2Note: 'Pick one and look at the discs: 3 groups of 5 ones, 3 groups of 5 tens, 3 groups of 5 hundreds. When there are 10, trade them for 1 disc of the next place.',
+  units: ['ones', 'tens', 'hundreds', 'thousands'],
+  regBtn: 'Trade 10 for 1',
+  ask2: 'Think first: what number is this?',
+  s2Why: '<b>5 ones × 3 = 15 ones, 5 tens × 3 = 15 tens, 5 hundreds × 3 = 15 hundreds.</b> The fact 5 × 3 = 15 does not change; only what we are counting changes, from ones to tens to hundreds. So 50 × 3 = 150: 15 tens.',
+  s3Eye: 'Hands-on · 2-digit × 1-digit (Lessons 2–4)',
+  s3H: 'Multiply the ones and the tens separately',
+  s3Note: 'Press the blue button step by step: ones first, then tens. If the ones reach 10, trade them for 1 ten and park it above the tens.',
+  btn: {
+    mulO: C => `Ones: ${C.oa} ones × ${C.k}`,
+    regO: () => 'Regroup the ones',
+    mulT: C => `Tens: ${C.ta} tens × ${C.k}`,
+    addC: () => 'Add in the regrouped ten',
+    regT: () => 'Regroup the tens',
+    end: () => 'See two other ways to write it'
+  },
+  cap0: C => `${C.a} is ${C.ta} tens and ${C.oa} ones. Multiply the ones first.`,
+  cap: {
+    mulO: C => `${C.oa} ones × ${C.k} = ${C.oa * C.k} ones. ` + (C.oa * C.k >= 10 ? 'That is 10 or more, so regroup.' : `Write ${C.oa * C.k} in the ones place.`),
+    regO: C => `${C.oa * C.k} ones = ${Math.floor(C.oa * C.k / 10)} ten${C.oa * C.k >= 20 ? 's' : ''} ${C.oa * C.k % 10} ones. Write ${C.oa * C.k % 10} in the ones place; park the regrouped ten above the tens and write a small <span class="red">${Math.floor(C.oa * C.k / 10)}</span> there.`,
+    mulT: C => `${C.ta} tens × ${C.k} = ${C.ta * C.k} tens.` + (C.carry0 ? ' <b>The ten parked above came from multiplying the ones. Do not multiply it again.</b>' : ''),
+    addC: C => `${C.ta * C.k} tens + ${C.carry0} ten${C.carry0 > 1 ? 's' : ''} = ${C.ta * C.k + C.carry0} tens.`,
+    regT: C => { const t = C.ta * C.k + C.carry0; return `${t} tens = ${Math.floor(t / 10)} hundred ${t % 10} tens.`; },
+    end: C => `${C.a} × ${C.k} = <b>${fmt(C.a * C.k)}</b>.`
+  },
+  pp: 'The algorithm can also write the two parts separately, then add:',
+  mental: C => `Mental math: split ${C.a} into ${C.ta * 10} and ${C.oa}. ${C.a} × ${C.k} = ${C.ta * 10 * C.k} + ${C.oa * C.k} = <b>${fmt(C.a * C.k)}</b>.`,
+  same: 'Three ways to write it, one idea: <b>split into tens and ones, multiply each, then add</b>. It is the cut from the top of the page.',
+  s3Why: 'Why not multiply the regrouped ten? <b>It is already a product</b> (it came from multiplying the ones), so we only add it to the tens. Multiplying it again would count it twice.',
+  hd: ['H', 'T', 'O'],
+  exEye: 'Examples from the book',
+  exH: 'Check with the book',
+  steps: [
+    ['① 4 × 12 (p. 139)', 'Split 12 into 10 and 2: 4 × 10 = 40, 4 × 2 = 8, 40 + 8 = <b>48</b>. Or split 12 into 6 and 6: 6 × 4 = 24, 24 + 24 = <b>48</b>. Different cuts, same answer.'],
+    ['② 50 × 3 (p. 140)', '5 tens × 3 = 15 tens = 1 hundred 5 tens = <b>150</b>.'],
+    ['③ 32 × 3 (pp. 144–145)', 'Method 1: 30 × 3 = 90, 2 × 3 = 6, 90 + 6 = <b>96</b>. Method 2: ones first, 2 × 3 = 6; then tens, 3 tens × 3 = 9 tens, written straight into the tens place: <b>96</b>.'],
+    ['④ 42 × 3 (pp. 148–149)', 'Ones: 2 × 3 = 6. Tens: 4 tens × 3 = 12 tens = 1 hundred 2 tens. Answer <b>126</b>. Mental math: 120 + 6.'],
+    ['⑤ 24 × 3 (pp. 152–153)', 'Ones: 4 × 3 = 12 ones = 1 ten 2 ones. Write 2; the 1 ten goes above the tens. Tens: 2 tens × 3 = 6 tens, <b>plus the regrouped ten</b> = 7 tens. Answer <b>72</b>.']
+  ],
+  order: '<b>Key points:</b> ① a number can be split into parts; multiply each part and add, and the total stays the same; ② splitting into tens and ones is the handiest; ③ 5 tens × 3 = 15 tens: the fact stays, the unit comes along; ④ trade 10 for 1: 10 ones for 1 ten, 10 tens for 1 hundred; ⑤ a regrouped number is already multiplied: add it, do not multiply it.',
+  bookNote: 'Based on the student book pages of Dimensions Math 3A Chapter 5, Lessons 1–4 (the teacher\'s guide pages for these lessons have not been checked yet).',
+  errEye: 'Common mistakes',
+  errH: 'Traps many people fall into',
+  errs: [
+    '<b>50 × 3 = 15 ✗</b> It is 15 <b>tens</b>, which is 150.',
+    '<b>32 × 3 = 36 ✗</b> Only the ones were multiplied. The 3 tens must be multiplied by 3 too: 9 tens. Answer 96.',
+    '<b>24 × 3 = 62 ✗</b> The regrouped ten was forgotten. 6 tens + 1 ten = 7 tens, answer 72.',
+    '<b>24 × 3 = 92 ✗</b> The regrouped ten was multiplied too (2 + 1 = 3, 3 × 3 = 9). The regrouped ten came from multiplying the ones: add it, do not multiply it.'
+  ],
+  quizEye: 'Quiz', quizH: 'Picture the discs in your head', score: 'Correct:', scoreRule: 'only your first try counts',
+  right: 'Right! ', again: 'Think again: ',
+  sayEye: 'Say it in your own words',
+  say: 'Take 3 sheets of paper and draw 13 dots on each. With a ruler, draw a line after the 10th dot on each sheet. Tell Dad why 13 × 3 = 10 × 3 + 3 × 3.',
+  relEye: 'Related concepts',
+  rel: ['Next: <a href="multiply-2digit.en.html">Multiplying by multiples of 10 and by 2-digit numbers</a> (4A Chapter 4): the same splitting, applied to the multiplier', '<a href="factors-multiples.en.html">Common factors and multiples</a>: multiples are a number times 1, 2, 3…'],
+  logEye: 'Learning log',
+  log: ['3A Chapter 5 Lessons 1–4 · Multiplying by a 1-digit number (splitting, regrouping)'],
+  star: 'Quiz star earned ★',
+  parentEye: 'For parents',
+  parent: ['The heart of this page is "make a cut". Mathematically it is the distributive property; in grade 3 there is no need for the word. Let your child cut and see for themselves that the total stays the same.', 'No discs at home? Coins or paper slips in three colors work. Let your child trade 10 ones for 1 ten <b>by hand</b>.', 'When the algorithm goes wrong, do not jump to fixing the steps. Ask first: "This digit is how many of what?" Ones, tens, or hundreds.'],
+  foot: 'Words used at school: multiply 乘 · product 积 · ones 个位 · tens 十位 · hundreds 百位 · thousands 千位 · regroup 进位 · place-value discs 数位圆片 · number bond 拆数图 · mental math 心算 · split 拆开.'
+}}[LANG];
+
+const $ = s => document.querySelector(s);
+const wait = ms => matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : ms;
+const after2 = fn => requestAnimationFrame(() => requestAnimationFrame(fn));
+document.querySelectorAll('[data-t]').forEach(e => e.innerHTML = S[e.dataset.t]);
+$('#back').textContent = S.back;
+$(LANG === 'zh' ? '#tozh' : '#toen').classList.add('on');
+for (const a of ['#tozh', '#toen']) $(a).addEventListener('click', () => { try { localStorage.setItem('lang', a === '#tozh' ? 'zh' : 'en'); } catch (e) {} });
+
+/* place-value discs, colours as in the book */
+const DISC = { 1000: ['#d9a521', '#fff'], 100: ['#e8912b', '#fff'], 10: ['#d94141', '#fff'], 1: ['#e6e9e9', '#33403f'] };
+function disc(x, y, r, v, cls, col) {
+  const [f, t] = DISC[v];
+  return `<g class="disc ${cls || ''}" data-c="${col}"><circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="rgba(0,0,0,.25)" stroke-width="1.2"/>` +
+    `<text x="${x}" y="${y + r * 0.34}" text-anchor="middle" style="fill:${t};font-size:${v >= 1000 ? r * 0.58 : v >= 100 ? r * 0.72 : r * 0.9}px;font-weight:600">${v >= 1000 ? '1,000' : v}</text></g>`;
+}
+/* n discs laid out from (cx, y0): in rows of rowLen (one row per group, dotted line between) or a plain grid */
+let BOTTOM = 0;
+function pile(cx, y0, n, v, col, rowLen, bornFrom, maxW) {
+  const per = rowLen || (n <= 4 ? Math.max(n, 3) : 5), sp = Math.min(58, maxW / per), r = sp * 0.42;
+  BOTTOM = Math.max(BOTTOM, y0 + Math.ceil(n / per) * sp);
+  let s = '';
+  const left = cx - (per * sp) / 2 + sp / 2;
+  for (let j = 0; j < n; j++) {
+    const row = Math.floor(j / per), x = left + (j % per) * sp, y = y0 + row * sp + r;
+    s += disc(x, y, r, v, bornFrom != null && j >= bornFrom ? 'pop' : '', col);
+  }
+  if (rowLen) for (let row = 1; row * per < n; row++) { const y = y0 + row * sp - 1; s += `<line x1="${left - sp / 2}" y1="${y}" x2="${left + per * sp - sp / 2}" y2="${y}" stroke="var(--a)" stroke-dasharray="3 4" stroke-width="1.5"/>`; }
+  return s;
+}
+
+/* ---------- Part 1: the array and the cut ---------- */
+const P1 = [[4, 12], [5, 13], [3, 14]];
+let A;
+function start1(i) { const [r, c] = P1[i]; A = { i, r, c, s: 10, shown: false }; render1(); }
+$('#pre1').innerHTML = P1.map((p, i) => `<button data-i="${i}">${p[0]} × ${p[1]}</button>`).join('');
+$('#pre1').addEventListener('click', e => { const b = e.target.closest('button'); if (b) start1(+b.dataset.i); });
+$('#cutL').addEventListener('click', () => { if (A.s > 1) { A.s--; A.shown = false; render1(); } });
+$('#cutR').addEventListener('click', () => { if (A.s < A.c - 1) { A.s++; A.shown = false; render1(); } });
+$('#cut10').addEventListener('click', () => { A.s = 10; A.shown = false; render1(); });
+$('#rev1').addEventListener('click', () => { A.shown = true; render1(); });
+function render1() {
+  const { r, c, s } = A, sp = Math.min(44, 600 / c), rad = sp * 0.4, x0 = (640 - c * sp) / 2 + sp / 2, y0 = 16;
+  let g = '';
+  for (let i = 0; i < r; i++) for (let j = 0; j < c; j++) {
+    const x = x0 + j * sp + (j >= s ? 10 : 0);
+    g += `<circle cx="${x}" cy="${y0 + i * sp + rad}" r="${rad}" fill="${j < s ? 'var(--dotA)' : 'var(--dotB)'}" stroke="rgba(0,0,0,.15)"/>`;
+  }
+  const cut = x0 + (s - 0.5) * sp + 5, H = y0 + r * sp + 64;
+  g += `<line x1="${cut}" y1="4" x2="${cut}" y2="${y0 + r * sp + 6}" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="7 5"/>`;
+  const mid1 = x0 + (s - 1) * sp / 2, mid2 = x0 + (s + (c - 1)) * sp / 2 + 10;
+  g += `<text x="${mid1}" y="${H - 16}" text-anchor="middle" style="font-size:30px;font-weight:600;fill:var(--ink)">${r} × ${s}</text>`;
+  g += `<text x="${mid2}" y="${H - 16}" text-anchor="middle" style="font-size:30px;font-weight:600;fill:var(--ink)">${r} × ${c - s}</text>`;
+  $('#dots').setAttribute('viewBox', `0 0 640 ${H}`); $('#dots').innerHTML = g;
+  $('#dots').setAttribute('aria-label', `${r} × ${c} = ${r} × ${s} + ${r} × ${c - s}`);
+  $('#eq1').innerHTML = `<span>${r} × ${c} = ${r} × ${s} + ${r} × ${c - s}</span>` + (A.shown ? `<span>= ${r * s} + ${r * (c - s)} = <b>${r * c}</b></span>` : '');
+  $('#ask1').hidden = A.shown; $('#res1').hidden = !A.shown;
+  if (A.shown) $('#res1').innerHTML = s === 10 ? `<p>${S.tenNote}</p>` : `<p>${LANG === 'zh' ? `换个地方切，两块加起来还是 ${r * c}。` : `Cut somewhere else and the two parts still add up to ${r * c}.`}</p>`;
+  $('#cutL').disabled = s <= 1; $('#cutR').disabled = s >= c - 1;
+}
+
+/* ---------- Part 2: k groups of one place, then trade 10 for 1 ---------- */
+const P2 = [[5, 3, 0], [5, 3, 1], [5, 3, 2], [2, 4, 0], [2, 4, 1], [2, 4, 2]];
+const PV = [1, 10, 100, 1000];
+let B, busy2 = false;
+function start2(i) { const [d, k, p] = P2[i]; B = { i, d, k, p, lo: d * k, hi: 0, reg: false, shown: false, born: null }; render2(); }
+$('#pre2').innerHTML = P2.map((x, i) => `<button data-i="${i}">${x[0] * PV[x[2]]} × ${x[1]}</button>`).join('');
+$('#pre2').addEventListener('click', e => { const b = e.target.closest('button'); if (b && !busy2) start2(+b.dataset.i); });
+$('#reg2').addEventListener('click', () => {
+  if (busy2 || B.lo < 10) return; busy2 = true; render2();
+  after2(() => [...document.querySelectorAll('#pv2 .disc[data-c="lo"]')].slice(0, 10).forEach(g => { g.style.transform = 'translateX(-160px) scale(.3)'; g.style.opacity = 0; }));
+  setTimeout(() => { B.born = { lo: Infinity, hi: B.hi }; B.lo -= 10; B.hi += 1; B.reg = B.lo < 10; busy2 = false; render2(); }, wait(750));
+});
+$('#rev2').addEventListener('click', () => { B.shown = true; render2(); });
+function render2() {
+  const { d, k, p } = B, U = S.units;
+  let g = ''; BOTTOM = 0;
+  [[p + 1, 'hi', 20], [p, 'lo', 330]].forEach(([pl, key, x]) => {
+    g += `<text x="${x + 145}" y="34" text-anchor="middle" style="font-size:28px;font-weight:600;fill:var(--ink)">${LANG === 'zh' ? U[pl] + '位' : U[pl][0].toUpperCase() + U[pl].slice(1)}</text>`;
+    const born = B.born ? B.born[key] : null;
+    g += pile(x + 145, 56, B[key], PV[pl], key, key === 'lo' && !B.reg && B.hi === 0 ? d : null, born, 280);
+  });
+  const H2 = Math.max(200, BOTTOM + 14);
+  g += `<line x1="320" y1="10" x2="320" y2="${H2 - 6}" stroke="var(--line)" stroke-width="2"/>`;
+  B.born = null;
+  $('#pv2').setAttribute('viewBox', `0 0 640 ${H2}`); $('#pv2').innerHTML = g;
+  const v = d * k * PV[p], uLo = U[p], uHi = U[p + 1];
+  let e = LANG === 'zh' ? `${d} 个${uLo} × ${k} = ${d * k} 个${uLo}` : `${d} ${uLo} × ${k} = ${d * k} ${uLo}`;
+  if (B.reg) e += LANG === 'zh' ? ` = ${B.hi} 个${uHi} ${B.lo ? B.lo + ' 个' + uLo : ''}` : ` = ${B.hi} ${B.hi > 1 ? uHi : uHi.replace(/s$/, '')}${B.lo ? ' ' + B.lo + ' ' + uLo : ''}`;
+  if (B.shown) e += ` = <b>${fmt(v)}</b>`;
+  $('#eq2').innerHTML = `<span>${e}</span>`;
+  const needReg = d * k >= 10 && !B.reg;
+  $('#reg2').hidden = !needReg; $('#reg2').disabled = busy2;
+  $('#ask2').hidden = needReg || B.shown || busy2;
+  $('#res2').hidden = !B.shown;
+  if (B.shown) $('#res2').innerHTML = `<p class="num" style="font-size:1.25rem">${fmt(d * PV[p])} × ${k} = <b>${fmt(v)}</b></p>`;
+}
+
+/* ---------- Part 3: 2-digit × 1-digit, step by step ---------- */
+const P3 = [[32, 3], [42, 3], [24, 3], [13, 5], [26, 4]];
+const CW = 210, CX = [5, 215, 425];
+let C, busy3 = false;
+function plan(ta, oa, k) {
+  const s = ['mulO'], c = Math.floor(oa * k / 10);
+  if (c) s.push('regO');
+  s.push('mulT');
+  if (c) s.push('addC');
+  if (ta * k + c >= 10) s.push('regT');
+  s.push('end');
+  return s;
+}
+function start3(i) {
+  const [a, k] = P3[i], ta = Math.floor(a / 10), oa = a % 10;
+  C = { i, a, k, ta, oa, carry0: Math.floor(oa * k / 10), h: 0, t: ta, o: oa, carry: 0, rowT: null, rowO: null, steps: plan(ta, oa, k), n: 0, cap: S.cap0({ a, ta, oa }), vd: {}, born: null, cur: 'O' };
+  render3();
+}
+$('#pre3').innerHTML = P3.map((p, i) => `<button data-i="${i}">${p[0]} × ${p[1]}</button>`).join('');
+$('#pre3').addEventListener('click', e => { const b = e.target.closest('button'); if (b && !busy3) start3(+b.dataset.i); });
+$('#reset3').addEventListener('click', () => { if (!busy3) start3(C.i); });
+$('#next3').addEventListener('click', () => {
+  if (busy3 || C.n >= C.steps.length) return;
+  const act = C.steps[C.n], prev = { h: C.h, t: C.t, o: C.o, carry: C.carry };
+  const finish = () => { C.n++; C.cap = S.cap[act](C); busy3 = false; render3(); };
+  if (act === 'mulO') { C.o = C.oa * C.k; C.rowO = C.oa; C.born = { o: prev.o }; C.cur = 'O'; if (C.o < 10) C.vd.o = C.o; finish(); }
+  else if (act === 'mulT') { C.t = C.ta * C.k; C.rowT = C.ta; C.born = { t: prev.t }; C.cur = 'T'; if (!C.carry0 && C.t < 10) C.vd.t = C.t; finish(); }
+  else if (act === 'end') { C.cur = ''; finish(); }
+  else {
+    busy3 = true; render3();
+    const col = act === 'regO' ? 'o' : act === 'addC' ? 'c' : 't';
+    const n = act === 'addC' ? C.carry : act === 'regO' ? Math.floor(C.o / 10) * 10 : 10;
+    const dx = act === 'addC' ? 'translateY(76px)' : `translateX(-${CW / 2}px) scale(.3)`;
+    after2(() => [...document.querySelectorAll(`#pv3 .disc[data-c="${col}"]`)].slice(0, n).forEach(g => { g.style.transform = dx; if (act !== 'addC') g.style.opacity = 0; }));
+    setTimeout(() => {
+      if (act === 'regO') { const q = Math.floor(C.o / 10); C.o %= 10; C.carry = q; C.rowO = null; C.born = { c: 0 }; C.vd.o = C.o; C.vd.c = q; }
+      if (act === 'addC') { C.t += C.carry; C.carry = 0; C.rowT = null; C.born = { t: C.t - C.carry0 }; if (C.t < 10) C.vd.t = C.t; }
+      if (act === 'regT') { C.h += Math.floor(C.t / 10); C.t %= 10; C.rowT = null; C.born = { h: 0 }; C.vd.t = C.t; C.vd.h = C.h; }
+      finish();
+    }, wait(750));
+  }
+});
+function render3() {
+  const H = S.hd;
+  let g = '', lines = ''; BOTTOM = 0;
+  [['h', 100, 0], ['t', 10, 1], ['o', 1, 2]].forEach(([key, v, i]) => {
+    const x = CX[i];
+    if (i) lines += `<line x1="${x}" y1="8" x2="${x}" y2="YB" stroke="var(--line)" stroke-width="2"/>`;
+    g += `<text x="${x + CW / 2}" y="34" text-anchor="middle" style="font-size:28px;font-weight:600;fill:var(--ink)">${LANG === 'zh' ? H[i] + '位' : ['Hundreds', 'Tens', 'Ones'][i]}</text>`;
+    const born = C.born && key in C.born ? C.born[key] : null;
+    g += pile(x + CW / 2, 120, C[key], v, key, key === 't' ? C.rowT : key === 'o' ? C.rowO : null, born, 196);
+  });
+  if (C.carry) {
+    g += `<rect x="${CX[1] + 10}" y="48" width="${CW - 20}" height="62" rx="12" fill="none" stroke="var(--red)" stroke-dasharray="6 5" stroke-width="2"/>`;
+    g += pile(CX[1] + CW / 2, 52, C.carry, 10, 'c', 3, C.born && 'c' in C.born ? 0 : null, 160);
+  }
+  C.born = null;
+  const H3 = Math.max(240, BOTTOM + 14);
+  $('#pv3').setAttribute('viewBox', `0 0 640 ${H3}`);
+  $('#pv3').innerHTML = lines.replace(/YB/g, H3 - 6) + g;
+  $('#pv3').setAttribute('aria-label', `${C.a} × ${C.k}`);
+
+  /* written algorithm: columns [sign, H, T, O] + label */
+  const cell = (t, cls = '') => `<span class="${cls}">${t === undefined || t === '' ? '&nbsp;' : t}</span>`;
+  const cur = c => C.cur === c ? 'cur' : '';
+  let h = cell('') + `<span class="hd" style="color:#e8912b">${H[0]}</span><span class="hd" style="color:#d94141">${H[1]}</span><span class="hd" style="color:var(--muted)">${H[2]}</span>` + cell('');
+  h += cell('') + cell('') + cell(C.vd.c ? C.vd.c : '', 'cy') + cell('') + cell('');
+  h += cell('') + cell('') + cell(C.ta, cur('T')) + cell(C.oa, cur('O')) + cell('');
+  h += cell('×') + cell('') + cell('') + cell(C.k) + cell('');
+  h += `<div class="ln" style="grid-column:1 / span 4"></div><span></span>`;
+  h += cell('') + cell(C.vd.h || '') + cell(C.vd.t !== undefined ? C.vd.t : (C.vd.h ? 0 : '')) + cell(C.vd.o !== undefined ? C.vd.o : '') + cell('');
+  $('#vf3').style.gridTemplateColumns = 'repeat(4, auto) auto';
+  $('#vf3').innerHTML = h;
+
+  $('#cap3').innerHTML = C.cap;
+  const done = C.n >= C.steps.length;
+  $('#next3').hidden = done;
+  if (!done) $('#next3').textContent = S.btn[C.steps[C.n]](C);
+  $('#next3').disabled = busy3;
+  $('#res3').hidden = !done;
+  if (done) {
+    const p1 = C.oa * C.k, p2 = C.ta * 10 * C.k, W = String(C.a * C.k).length + 1;
+    const row = (str, lbl) => { const cs = Array(W).fill('&nbsp;'); [...str].reverse().forEach((ch, j) => cs[W - 1 - j] = ch); return cs.map(x => `<span>${x}</span>`).join('') + `<span class="lbl">${lbl || ''}</span>`; };
+    let v = row(String(C.a)) + row(String(C.k)).replace('<span>&nbsp;</span>', '<span>×</span>') + `<div class="ln" style="grid-column:1 / span ${W}"></div><span></span>`;
+    v += row(String(p1), `← ${C.oa} × ${C.k}`) + row(String(p2), `← ${C.ta * 10} × ${C.k}`) + `<div class="ln" style="grid-column:1 / span ${W}"></div><span></span>` + row(String(C.a * C.k));
+    $('#res3').innerHTML = `<p>${S.pp}</p><div class="vf" style="grid-template-columns:repeat(${W}, auto) auto;font-size:1.3rem">${v}</div><p>${S.mental(C)}</p><p>${S.same}</p>`;
+  }
+}
+
+/* ---------- text blocks ---------- */
+$('#steps').innerHTML = S.steps.map(([h, t]) => `<div class="step"><h3>${h}</h3><p>${t}</p></div>`).join('');
+$('#errs').innerHTML = S.errs.map(t => `<p class="err">${t}</p>`).join('');
+$('#rel').innerHTML = S.rel.map(t => `<li>${t}</li>`).join('');
+$('#parent').innerHTML = S.parent.map(t => `<li>${t}</li>`).join('');
+function renderLog() {
+  let st = false; try { st = !!localStorage.getItem('star:' + ID); } catch (e) {}
+  $('#log').innerHTML = S.log.map(t => `<li>${t}${st ? ' · <span class="star">' + S.star + '</span>' : ''}</li>`).join('');
+}
+
+/* quiz: k = index of the right choice; each question has its own hint */
+const QZ = [
+  { q: { zh: '5 个十 × 3 = 15 个 ___', en: '5 tens × 3 = 15 ___' }, ch: [{ zh: '一', en: 'ones' }, { zh: '十', en: 'tens' }, { zh: '百', en: 'hundreds' }], k: 1,
+    hint: { zh: '乘的是什么圆片？', en: 'What kind of disc are we multiplying?' },
+    why: { zh: '乘的是十，答案就是几个十：15 个十 = 150。', en: 'We multiplied tens, so the answer is tens: 15 tens = 150.' } },
+  { q: { zh: '50 × 3 = ?', en: '50 × 3 = ?' }, ch: ['15', '150', '1,500'], k: 1,
+    hint: { zh: '50 是 5 个十。', en: '50 is 5 tens.' },
+    why: { zh: '5 个十 × 3 = 15 个十 = 150。', en: '5 tens × 3 = 15 tens = 150.' } },
+  { q: { zh: '4 × 12 = 4 × 10 + 4 × ___', en: '4 × 12 = 4 × 10 + 4 × ___' }, ch: ['2', '12', '10'], k: 0,
+    hint: { zh: '12 切成 10 和几？', en: '12 is cut into 10 and what?' },
+    why: { zh: '12 = 10 + 2，切成两块：4 × 10 和 4 × 2。', en: '12 = 10 + 2, so the two parts are 4 × 10 and 4 × 2.' } },
+  { q: { zh: '32 × 3 = 30 × 3 + 2 × 3 = ?', en: '32 × 3 = 30 × 3 + 2 × 3 = ?' }, ch: ['96', '66', '36'], k: 0,
+    hint: { zh: '30 × 3 是几个十？', en: '30 × 3 is how many tens?' },
+    why: { zh: '90 + 6 = 96。', en: '90 + 6 = 96.' } },
+  { q: { zh: '24 × 3：4 个一 × 3 = 12 个一，可以换成？', en: '24 × 3: 4 ones × 3 = 12 ones. Regroup them as?' }, ch: [{ zh: '1 个十 2 个一', en: '1 ten 2 ones' }, { zh: '12 个十', en: '12 tens' }, { zh: '1 个百 2 个一', en: '1 hundred 2 ones' }], k: 0,
+    hint: { zh: '10 个一换 1 个十。', en: '10 ones make 1 ten.' },
+    why: { zh: '10 个一换成 1 个十，还剩 2 个一。', en: '10 ones become 1 ten, with 2 ones left.' } },
+  { q: { zh: '24 × 3：进上来的 1 个十，要不要也乘 3？', en: '24 × 3: should the regrouped ten be multiplied by 3 too?' }, ch: [{ zh: '要，也乘 3', en: 'Yes, multiply it' }, { zh: '不要，直接加上', en: 'No, just add it' }], k: 1,
+    hint: { zh: '这个十是从哪来的？', en: 'Where did that ten come from?' },
+    why: { zh: '它是乘个位得来的，已经乘过了，只加不乘：6 个十 + 1 个十 = 7 个十，答案 72。', en: 'It came from multiplying the ones; it is already multiplied. Add it: 6 tens + 1 ten = 7 tens, so 72.' } },
+  { q: { zh: '42 × 3：4 个十 × 3 = 12 个十，是多少？', en: '42 × 3: 4 tens × 3 = 12 tens. What is that?' }, ch: ['12', '120', '1,200'], k: 1,
+    hint: { zh: '12 个十，10 个十换 1 个百。', en: '12 tens: 10 tens make 1 hundred.' },
+    why: { zh: '12 个十 = 1 个百 2 个十 = 120。再加个位的 6，答案 126。', en: '12 tens = 1 hundred 2 tens = 120. Add the 6 ones: 126.' } },
+  { q: { zh: '13 × 5 = ?', en: '13 × 5 = ?' }, ch: ['55', '65', '515'], k: 1,
+    hint: { zh: '拆成 10 和 3：10 × 5 是多少？3 × 5 是多少？', en: 'Split into 10 and 3: what is 10 × 5? 3 × 5?' },
+    why: { zh: '50 + 15 = 65。写成 55 是忘了加进上来的十；写成 515 是把 5 和 15 直接拼在了一起。', en: '50 + 15 = 65. 55 forgets the regrouped ten; 515 just sticks 5 and 15 together.' } }
+];
+const T = c => typeof c === 'string' ? c : c[LANG];
+const done = new Map();
+$('#quiz').innerHTML = QZ.map((x, i) => `<div class="q" data-i="${i}"><p><b class="num">${i + 1}.</b> ${x.q[LANG]}</p><div class="btns">${x.ch.map((c, j) => `<button class="num" data-j="${j}">${T(c)}</button>`).join('')}</div><div class="fb" hidden></div></div>`).join('');
+$('#score').textContent = `0 / ${QZ.length}`;
+$('#quiz').addEventListener('click', e => {
+  const b = e.target.closest('button[data-j]'); if (!b) return;
+  const box = b.closest('.q'), i = +box.dataset.i, x = QZ[i], ok = +b.dataset.j === x.k;
+  if (!done.has(i)) done.set(i, ok);
+  box.querySelectorAll('button').forEach(o => o.classList.remove('pickok', 'pickno')); b.classList.add(ok ? 'pickok' : 'pickno');
+  const fb = box.querySelector('.fb'); fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = ok ? `<b>${S.right}</b>${x.why[LANG]}` : `<b>${S.again}</b>${x.hint[LANG]}`;
+  const right = [...done.values()].filter(Boolean).length;
+  $('#score').textContent = `${right} / ${QZ.length}`;
+  if (right >= QZ.length - 1) { try { localStorage.setItem('star:' + ID, '1'); } catch (e) {} renderLog(); }
+});
+
+start1(0);
+start2(0);
+start3(0);
+renderLog();
+</script>
+</body>
+</html>
